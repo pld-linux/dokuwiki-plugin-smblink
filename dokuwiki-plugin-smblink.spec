@@ -2,14 +2,14 @@
 Summary:	Plugin to make Windows Share Links globally accessible
 Name:		dokuwiki-plugin-%{plugin}
 Version:	20090209
-Release:	0.2
+Release:	1
 License:	GPL v2
 Group:		Applications/WWW
 Source0:	http://doku-smblink.googlecode.com/files/smblink.zip
 # Source0-md5:	b880e7d257904050c97396ffbd7a9d5e
 URL:		http://wiki.splitbrain.org/plugin:smblink
 BuildRequires:	rpmbuild(macros) >= 1.553
-Requires:	dokuwiki >= 20061106
+Requires:	dokuwiki >= 20091225-7
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -35,6 +35,13 @@ if [ "$(echo "$version" | tr -d -)" != %{version} ]; then
 	exit 1
 fi
 
+cat <<'EOF' > script.js
+addInitEvent(function() {
+	// Reset warning as we now handle the links for all OS
+	LANG['nosmblinks'] = '';
+});
+EOF
+
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{plugindir}
@@ -53,3 +60,4 @@ fi
 %defattr(644,root,root,755)
 %dir %{plugindir}
 %{plugindir}/*.php
+%{plugindir}/*.js
