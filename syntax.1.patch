@@ -1,0 +1,49 @@
+*** syntax.php	2009-02-09 17:08:04.000000000 +0200
+--- syntax_t-verssion.php	2010-04-30 12:11:50.000000000 +0300
+***************
+*** 78,102 ****
+          } else {
+              $link['class'] = 'media';
+          }
+!         //Format the link for smb (Linux or Win-Firefox)
+          //Just replace all \ with / to get something like smb://host/path/to/file
+!         $smburl='smb:' . str_replace('\\', '/', $url);
+!         //If we're using linux, then smb:// protocol works fine.
+!         if (strstr($_SERVER['HTTP_USER_AGENT'], 'Linux')) {
+!             $url = $smburl;
+!         } else {
+!             //If we're not on linux, we might be using IE, so...
+!             //Replace the \\ with the file:/// protocol and put the \\ back in
+!             $url = str_replace('\\\\', 'file:///\\\\', $url);
+!             //Use javascript to change the link in Firefox to the smb url.
+!             $link['more'] =
+!                 'onclick="if(document.all == null){' .
+!                     "parent.location='".$smburl."';" .
+!                 '}" ' .
+!                 'onkeypress="if(document.all == null){' .
+!                     "parent.location='".$smburl."';" .
+!                 '}"';
+!         }
+  
+          $link['url'] = $url;
+  
+--- 78,96 ----
+          } else {
+              $link['class'] = 'media';
+          }
+! 
+          //Just replace all \ with / to get something like smb://host/path/to/file
+!         $smburl='smb:' . str_replace('\\', '/', $url);
+!         //Replace the \\ with the file:/// protocol and put the \\ back in
+!         $url = str_replace('\\\\', 'file:///\\\\', $url);
+!         //Use javascript to change the link in other browsers then IE to the smb url.
+!         $link['more'] =
+!             'onclick="if(!(/Internet Explorer/.test(navigator.appName))){' .
+!                 " window.location.href='".$smburl."';" .
+!             '}" ' .
+!             'onkeypress="if(!(/Internet Explorer/.test(navigator.appName))){' .
+!                 " window.location.href='".$smburl."';" .
+!             '}"';
+  
+          $link['url'] = $url;
+  

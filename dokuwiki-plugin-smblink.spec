@@ -2,11 +2,12 @@
 Summary:	Plugin to make Windows Share Links globally accessible
 Name:		dokuwiki-plugin-%{plugin}
 Version:	20090209
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/WWW
 Source0:	http://doku-smblink.googlecode.com/files/smblink.zip
 # Source0-md5:	b880e7d257904050c97396ffbd7a9d5e
+Patch0:		syntax.1.patch
 URL:		http://wiki.splitbrain.org/plugin:smblink
 BuildRequires:	rpmbuild(macros) >= 1.553
 BuildRequires:	unzip
@@ -29,6 +30,7 @@ to better support the Firefox browser.
 %setup -qc
 mv %{plugin}/* .
 %undos *.php
+%patch0 -p0
 
 version=$(awk -F"'" '/date/{print $4}' syntax.php)
 if [ "$(echo "$version" | tr -d -)" != %{version} ]; then
